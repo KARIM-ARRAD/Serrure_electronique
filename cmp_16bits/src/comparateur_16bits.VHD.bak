@@ -1,0 +1,68 @@
+--**********************************************************--
+-- ENSA FES --
+-- Filière : --
+--**********************************************************--
+--Title : Le nom du programme
+--TP : Le nom du TP
+--Block : Le nom du bloc
+--
+--*************************************************************--
+--File : Le nom du fichier
+--Authors : Le nom du binôme
+--Created : La date de création
+--
+--*************************************************************--
+--Description :
+--
+--
+--
+--*************************************************************
+--***********************************************************
+-- Used Libraries
+--***********************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+--************************************************************--
+-- ENTITY Declaration
+--************************************************************
+ENTITY comparateur_16bits IS
+	PORT (
+		code_sig : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		clef	 : OUT STD_LOGIC );
+END comparateur_16bits;
+
+--***********************************************************--
+-- RTL Description
+--************************************************************
+ARCHITECTURE rtl OF comparateur_16bits IS
+	COMPONENT comparateur_4bits PORT(
+	in_key:IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+	fixed_key:IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+	EGA_out: OUT STD_LOGIC);
+	END COMPONENT;
+
+	SIGNAL EGA_0 : STD_LOGIC;
+	SIGNAL EGA_1 : STD_LOGIC;
+	SIGNAL EGA_2 : STD_LOGIC;
+	SIGNAL EGA_3 : STD_LOGIC;
+	
+	BEGIN
+		U0:comparateur_4bits PORT MAP(
+		in_key=>code_sig(15 DOWNTO 12),
+		fixed_key=>"0001",
+		EGA_out=>EGA_0);
+		U1:comparateur_4bits PORT MAP(
+		in_key=>code_sig(11 DOWNTO 8),
+		fixed_key=>"0010",
+		EGA_out=>EGA_1);
+		U2:comparateur_4bits PORT MAP(
+		in_key=>code_sig(7 DOWNTO 4),
+		fixed_key=>"0011",
+		EGA_out=>EGA_2);
+		U3:comparateur_4bits PORT MAP(
+		in_key=>code_sig(3 DOWNTO 0),
+		fixed_key=>"0100",
+		EGA_out=>EGA_3);
+		clef <= EGA_0 AND EGA_1 AND EGA_2 AND EGA_3;
+END rtl;

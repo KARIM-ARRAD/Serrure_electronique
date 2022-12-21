@@ -1,0 +1,61 @@
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+ENTITY bascule_d_tb IS 
+END bascule_d_tb;
+ARCHITECTURE RTL OF bascule_d_tb IS
+	COMPONENT bascule_d PORT (
+		enable : IN STD_LOGIC ;
+		rst    : IN STD_LOGIC ;
+		clk    : IN STD_LOGIC ;
+		d      : IN STD_LOGIC ;
+		q      : OUT STD_LOGIC );
+	END COMPONENT ;
+	SIGNAL enable :  STD_LOGIC ;
+	SIGNAL	rst    :  STD_LOGIC ;
+	SIGNAL	clk    :  STD_LOGIC ;
+	SIGNAL	d      :  STD_LOGIC ;
+	SIGNAL	q      :  STD_LOGIC :='0';
+
+	BEGIN 
+		U0 : bascule_d PORT MAP (
+			enable => enable,
+			rst    => rst,
+			clk    => clk,
+			d      => d,
+			q      => q);
+		PROCESS
+			BEGIN
+			rst <= '0';
+			WAIT FOR 35 NS ;
+			rst <= '1';
+			WAIT FOR 12 NS ;
+			
+		END PROCESS;
+
+		PROCESS
+			BEGIN
+			clk <= '0';
+			WAIT FOR 10 NS;
+			clk <= '1';
+			WAIT FOR 10 NS;		
+			
+		END PROCESS;
+		PROCESS
+			BEGIN
+			enable <= '1';
+			WAIT FOR 41 NS;
+			enable <= '0';
+			WAIT FOR 15 NS;		
+			
+		END PROCESS;
+		PROCESS
+			BEGIN
+			d <= '0';
+			WAIT FOR 13 NS;
+			d <= '1';
+			WAIT FOR 13 NS;
+			
+		END PROCESS;
+
+
+END RTL;

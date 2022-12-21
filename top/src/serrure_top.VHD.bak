@@ -1,0 +1,85 @@
+--**********************************************************--
+-- 				ENSA FES 
+-- 		Filière :  	 GSEII 1
+--**********************************************************--
+--Title : Architecture top
+--TP : TP-2 : Conception d?une serrure électronique
+--Block : Architecture top
+--
+--*************************************************************--
+--File : serrure_top.VHD
+--Authors : El Haouat Zakariae
+--Created : 28/03/2020
+--
+--*************************************************************--
+--***********************************************************
+-- Used Libraries
+--***********************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+--************************************************************--
+-- ENTITY Declaration
+--************************************************************
+ENTITY serrure_top IS
+	PORT (
+		data_in :IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		rst    : IN STD_LOGIC ;
+		clk    : IN STD_LOGIC ;		clef : OUT STD_LOGIC );
+END serrure_top;
+
+--***********************************************************--
+-- RTL Description
+--************************************************************
+ARCHITECTURE RTL OF serrure_top IS
+	
+	COMPONENT codeur PORT(
+		data_in : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		data_s : OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+	);END COMPONENT;
+
+	COMPONENT detection_caractere PORT (
+		data_in : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		detect  : OUT STD_LOGIC
+	);
+	END COMPONENT;
+	
+	COMPONENT memoire PORT (
+		detect : IN STD_LOGIC ;
+		rst    : IN STD_LOGIC ;
+		clk    : IN STD_LOGIC ;
+		data_s : IN STD_LOGIC_VECTOR (3 DOWNTO 0) ;
+		code_sig : OUT STD_LOGIC_VECTOR (15 DOWNTO 0) );
+
+	END COMPONENT ;
+
+	COMPONENT comparateur_16bits PORT (
+		code_sig : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+		clef	 : OUT STD_LOGIC );
+	END COMPONENT ;
+
+	
+	
+	SIGNAL detect  :  STD_LOGIC;
+	SIGNAL data_s :  STD_LOGIC_VECTOR (3 DOWNTO 0);
+	SIGNAL code_sig :  STD_LOGIC_VECTOR (15 DOWNTO 0);
+
+	BEGIN
+		U0 : codeur PORT MAP(
+			data_in => data_in ,
+			data_s => data_s
+		);
+		U1 : detection_caractere PORT MAP(
+			data_in => data_in ,
+			detect => detect
+		);
+		U2 :  memoire PORT MAP (
+			detect => detect,
+			rst    => rst,
+			clk    => clk,
+			data_s      => data_s,
+			code_sig     => code_sig);
+		U3 : comparateur_16bits PORT MAP (
+			code_sig => code_sig,
+			clef	 => clef );
+END RTL ;

@@ -1,0 +1,37 @@
+--**********************************************************--
+-- 				ENSA FES 
+-- 		Filière :  	 GSEII 1
+--**********************************************************--
+--Title : Comparateur 4 bits
+--TP : TP-2 : Conception d?une serrure électronique
+--Block : Le nom du bloc
+--
+--*************************************************************--
+--File : comparateur_4bits.VHD
+--Authors : El Haouat Zakariae
+--Created : 28/03/2020
+--
+--*************************************************************--
+--***********************************************************
+-- Used Libraries
+--***********************************************************
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+--************************************************************--
+-- ENTITY Declaration
+--************************************************************
+ENTITY comparateur_4bits IS 
+PORT (
+	in_key:IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+	fixed_key:IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+	EGA_out: OUT STD_LOGIC);
+END comparateur_4bits;
+
+--***********************************************************--
+-- RTL Description
+--************************************************************
+ARCHITECTURE RTL OF comparateur_4bits IS 
+	BEGIN
+	EGA_out <='1' WHEN in_key=fixed_key ELSE 
+	'0';
+	END RTL;
